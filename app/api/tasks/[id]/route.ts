@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "notdb";
+import { NextRequest, NextResponse } from "next/server";
 
 // Initialize NotDatabase client with schema
 const db = createClient({
-  apiKey: "J_Kt8BTlqAfyjPbYeC4QOwu4kTZqhAIN",
+  apiKey: process.env.NOTDB_API_KEY!,
   schema: {
     tasks: {
       properties: {
@@ -17,10 +17,11 @@ const db = createClient({
 // GET - Read single task by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const task = await db.tasks.find({ filter: { _id: params.id } });
+    const { id } = await params;
+    const task = await db.tasks.find({ filter: { _id: id } });
 
     if (!task) {
       return NextResponse.json(
@@ -46,11 +47,12 @@ export async function GET(
 // PUT - Update task by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const updatedTask = await db.tasks.update(params.id, body);
+    const updatedTask = await db.tasks.update(id, body);
 
     return NextResponse.json({
       success: true,
@@ -69,10 +71,11 @@ export async function PUT(
 // DELETE - Delete task by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await db.tasks.delete(params.id);
+    const { id } = await params;
+    await db.tasks.delete(id);
 
     return NextResponse.json({
       success: true,

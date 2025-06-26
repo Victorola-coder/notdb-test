@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button, Input, Card } from "./components/ui";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
+import { Button, Input } from "./components/ui";
 import {
   Rocket,
   BarChart3,
@@ -360,10 +360,13 @@ export default function SimpleTasksPage() {
             {tasks.map((task, index) => (
               <div
                 key={task._id}
-                className="group relative"
+                className="group relative opacity-0"
                 style={{
                   animationDelay: `${index * 50}ms`,
-                  animation: "fadeInUp 0.5s ease-out forwards",
+                  animationName: "fadeInUp",
+                  animationDuration: "0.5s",
+                  animationTimingFunction: "ease-out",
+                  animationFillMode: "forwards",
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-500/5 to-slate-400/5 rounded-2xl blur-sm group-hover:from-purple-500/10 group-hover:to-cyan-500/10 transition-all duration-300"></div>

@@ -3,7 +3,7 @@ import { createClient } from "notdb";
 
 // Initialize NotDatabase client with schema
 const db = createClient({
-  apiKey: "J_Kt8BTlqAfyjPbYeC4QOwu4kTZqhAIN",
+  apiKey: process.env.NOTDB_API_KEY!,
   schema: {
     tasks: {
       properties: {
