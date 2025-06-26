@@ -19,6 +19,9 @@ import {
   Edit3,
   Calendar,
   Hash,
+  Zap,
+  Code,
+  Shield,
 } from "lucide-react";
 
 interface Task {
@@ -37,6 +40,28 @@ export default function SimpleTasksPage() {
   const [creatingSamples, setCreatingSamples] = useState(false);
   const [updatingTasks, setUpdatingTasks] = useState<Set<string>>(new Set());
   const [deletingTasks, setDeletingTasks] = useState<Set<string>>(new Set());
+  const [showLoader, setShowLoader] = useState(true);
+  const [loaderProgress, setLoaderProgress] = useState(0);
+
+  // Epic loader sequence
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoader(false);
+    }, 4000);
+
+    // Progress animation
+    const progressInterval = setInterval(() => {
+      setLoaderProgress((prev) => {
+        if (prev >= 100) return 100;
+        return prev + 2.5; // 100% in 4 seconds
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(progressInterval);
+    };
+  }, []);
 
   // Load tasks from API
   const loadTasks = async () => {
@@ -199,16 +224,179 @@ export default function SimpleTasksPage() {
     }
   };
 
-  // Load tasks on component mount
+  // Load tasks on component mount (after loader)
   useEffect(() => {
-    loadTasks();
-  }, []);
+    if (!showLoader) {
+      loadTasks();
+    }
+  }, [showLoader]);
 
   const completedCount = tasks.filter((t) => t.completed).length;
   const pendingCount = tasks.length - completedCount;
 
+  // Epic Loader Screen
+  if (showLoader) {
+    return (
+      <div className="fixed inset-0 bg-black overflow-hidden">
+        {/* Epic animated background */}
+        <div className="absolute inset-0">
+          {/* Animated grid */}
+          <div className="absolute inset-0 opacity-20">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)",
+                backgroundSize: "40px 40px",
+                animation: "float 20s ease-in-out infinite",
+              }}
+            ></div>
+          </div>
+
+          {/* Floating orbs */}
+          <div className="absolute top-20 left-1/4 w-32 h-32 bg-purple-500 rounded-full mix-blend-screen filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute top-40 right-1/4 w-24 h-24 bg-cyan-500 rounded-full mix-blend-screen filter blur-xl opacity-70 animate-pulse delay-1000"></div>
+          <div className="absolute bottom-32 left-1/3 w-28 h-28 bg-pink-500 rounded-full mix-blend-screen filter blur-xl opacity-70 animate-pulse delay-500"></div>
+
+          {/* Lightning effects */}
+          <div className="absolute top-1/4 left-10 w-1 h-32 bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-80 animate-pulse delay-200"></div>
+          <div className="absolute top-1/3 right-16 w-1 h-24 bg-gradient-to-b from-transparent via-purple-400 to-transparent opacity-80 animate-pulse delay-700"></div>
+        </div>
+
+        {/* Main loader content */}
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            {/* Epic logo */}
+            <div className="mb-8 relative">
+              <div className="w-24 h-24 mx-auto mb-6 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl rotate-12 animate-spin-slow opacity-80"></div>
+                <div className="absolute inset-2 bg-black rounded-lg flex items-center justify-center">
+                  <Database className="w-10 h-10 text-white animate-pulse" />
+                </div>
+              </div>
+
+              {/* Epic title */}
+              <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent animate-pulse">
+                NotDatabase
+              </h1>
+
+              {/* Tagline with maximum aura */}
+              <div className="mb-8">
+                <p className="text-xl text-purple-300 mb-2 animate-pulse delay-300">
+                  Connecting to the most kinikan database...
+                </p>
+                <div className="flex items-center justify-center gap-2 text-cyan-400">
+                  <Zap className="w-4 h-4 animate-bounce" />
+                  <span className="text-sm font-mono">
+                    MAXIMUM AURA DETECTED
+                  </span>
+                  <Zap className="w-4 h-4 animate-bounce delay-100" />
+                </div>
+              </div>
+            </div>
+
+            {/* Epic progress bar */}
+            <div className="w-80 mx-auto mb-8">
+              <div className="flex justify-between mb-2">
+                <span className="text-slate-400 text-sm">
+                  Initializing quantum protocols...
+                </span>
+                <span className="text-cyan-400 text-sm font-mono">
+                  {Math.floor(loaderProgress)}%
+                </span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 bg-size-200 animate-gradient-x transition-all duration-300 ease-out rounded-full relative"
+                  style={{ width: `${loaderProgress}%` }}
+                >
+                  <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Status indicators */}
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-center gap-3 text-green-400">
+                <Shield className="w-4 h-4" />
+                <span>Quantum encryption enabled</span>
+              </div>
+              <div className="flex items-center justify-center gap-3 text-cyan-400">
+                <Code className="w-4 h-4" />
+                <span>TypeScript schemas optimized</span>
+              </div>
+              <div className="flex items-center justify-center gap-3 text-purple-400">
+                <Rocket className="w-4 h-4" />
+                <span>Preparing for maximum velocity</span>
+              </div>
+            </div>
+
+            {/* Loading spinner */}
+            <div className="mt-8 flex justify-center">
+              <div className="relative">
+                <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
+                <div className="absolute inset-1 w-6 h-6 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin-reverse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CSS for custom animations */}
+        <style jsx>{`
+          @keyframes float {
+            0%,
+            100% {
+              transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+              transform: translateY(-20px) rotate(180deg);
+            }
+          }
+          @keyframes spin-slow {
+            from {
+              transform: rotate(0deg);
+            }
+            to {
+              transform: rotate(360deg);
+            }
+          }
+          @keyframes gradient-x {
+            0%,
+            100% {
+              background-position: 0% 50%;
+            }
+            50% {
+              background-position: 100% 50%;
+            }
+          }
+          @keyframes spin-reverse {
+            from {
+              transform: rotate(360deg);
+            }
+            to {
+              transform: rotate(0deg);
+            }
+          }
+          .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+          }
+          .animate-gradient-x {
+            animation: gradient-x 2s ease infinite;
+          }
+          .animate-spin-reverse {
+            animation: spin-reverse 1s linear infinite;
+          }
+          .bg-size-200 {
+            background-size: 200% 200%;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Main App (shown after loader)
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden animate-fade-in">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -505,6 +693,17 @@ export default function SimpleTasksPage() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-out;
         }
       `}</style>
     </div>
