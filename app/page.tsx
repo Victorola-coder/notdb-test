@@ -7,7 +7,6 @@ import {
   Image,
   Input,
   Modal,
-  Otp,
   Select,
   Skeleton,
   Tabs,
@@ -61,9 +60,9 @@ export default function Home() {
             <div className="flex gap-4 justify-center">
               <Button
                 variant="primary"
-                onClick={() => toast.success("Copied to clipboard!")}
+                onClick={() => window.open("/simple-tasks", "_self")}
               >
-                Get Started
+                Try Simple Tasks App
               </Button>
               <Button
                 variant="secondary"
@@ -295,7 +294,9 @@ export default function Home() {
                 <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
                 <div className="mt-8">
                   <h3 className="text-white mb-4">OTP Input</h3>
-                  <Otp />
+                  <div className="text-[#FFFFFF80]">
+                    OTP component not available
+                  </div>
                 </div>
               </div>
             </Glow>
