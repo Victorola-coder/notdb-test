@@ -461,7 +461,7 @@ export default function SimpleTasksPage() {
           <div className="mt-12 lg:mt-16 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-cyan-500/5 rounded-2xl blur-xl"></div>
             <div className="relative bg-slate-800/40 backdrop-blur-sm border border-slate-700/40 rounded-2xl p-6 lg:p-8 text-center">
-              <h3 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2">
+              <h3 className="text-sm lg:text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2">
                 <Database className="w-5 h-5" />
                 NotDatabase CRUD Operations
               </h3>
