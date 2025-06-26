@@ -283,12 +283,12 @@ export default function SimpleTasksPage() {
               {/* Tagline with maximum aura */}
               <div className="mb-8">
                 <p className="text-xl text-purple-300 mb-2 animate-pulse delay-300">
-                  Connecting to the most kinikan database...
+                  Connecting to the most powerful TypeScript-first database...
                 </p>
                 <div className="flex items-center justify-center gap-2 text-cyan-400">
                   <Zap className="w-4 h-4 animate-bounce" />
                   <span className="text-sm font-mono">
-                    MAXIMUM AURA DETECTED
+                    SCHEMA VALIDATION ACTIVATED
                   </span>
                   <Zap className="w-4 h-4 animate-bounce delay-100" />
                 </div>
